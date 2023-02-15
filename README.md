@@ -1,42 +1,24 @@
-# Nuxt 3 Minimal Starter
+# Nuxt 3 Tiptap Sample
 
-Look at the [Nuxt 3 documentation](https://nuxt.com/docs/getting-started/introduction) to learn more.
+Real-time Collaborative Editor sample with [Tiptap](https://tiptap.dev/) on Nuxt3
+
+https://user-images.githubusercontent.com/1793103/218935313-29233aee-893f-408a-87ff-03c26b831a2b.mov
 
 ## Setup
 
-Make sure to install the dependencies:
-
 ```bash
-# yarn
-yarn install
-
-# npm
 npm install
-
-# pnpm
-pnpm install
 ```
 
 ## Development Server
+
+Start the websocket server on ws://localhost:1234
+```bash
+npx y-websocket
+```
 
 Start the development server on http://localhost:3000
 
 ```bash
 npm run dev
 ```
-
-## Production
-
-Build the application for production:
-
-```bash
-npm run build
-```
-
-Locally preview production build:
-
-```bash
-npm run preview
-```
-
-Check out the [deployment documentation](https://nuxt.com/docs/getting-started/deployment) for more information.
