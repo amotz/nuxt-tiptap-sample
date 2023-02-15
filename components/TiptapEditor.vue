@@ -3,9 +3,10 @@
 </template>
 
 <script>
-import { Editor, EditorContent } from '@tiptap/vue-3'
-import StarterKit from '@tiptap/starter-kit'
-import Collaboration from '@tiptap/extension-collaboration'
+import { Editor, EditorContent } from "@tiptap/vue-3";
+import StarterKit from "@tiptap/starter-kit";
+import Collaboration from "@tiptap/extension-collaboration";
+import CollaborationCursor from "@tiptap/extension-collaboration-cursor";
 
 import { WebsocketProvider } from "y-websocket";
 import * as Y from "yjs";
@@ -18,29 +19,84 @@ export default {
   data() {
     return {
       editor: null,
-    }
+      provider: null,
+    };
   },
 
   mounted() {
     const ydoc = new Y.Doc();
-    this.provider = new WebsocketProvider("ws://localhost:1234", "sample-document", ydoc);
-    
+    this.provider = new WebsocketProvider(
+      "ws://localhost:1234",
+      "sample-document",
+      ydoc
+    );
+
     this.editor = new Editor({
-      content: '',
+      content: "",
       extensions: [
         StarterKit,
         Collaboration.configure({
           document: ydoc,
         }),
+        CollaborationCursor.configure({
+          provider: this.provider,
+          user: { name: this.getRandomName(), color: this.getRandomColor() },
+        }),
       ],
-    })
+    });
   },
 
   beforeDestroy() {
-    this.editor.destroy()
+    this.editor.destroy();
     this.provider.destroy();
   },
-}
+
+  methods: {
+    getRandomColor() {
+      const list = [
+        "#958DF1",
+        "#F98181",
+        "#FBBC88",
+        "#FAF594",
+        "#70CFF8",
+        "#94FADB",
+        "#B9F18D",
+      ];
+      return list[Math.floor(Math.random() * list.length)];
+    },
+
+    getRandomName() {
+      const list = [
+        "Lea Thompson",
+        "Cyndi Lauper",
+        "Tom Cruise",
+        "Madonna",
+        "Jerry Hall",
+        "Joan Collins",
+        "Winona Ryder",
+        "Christina Applegate",
+        "Alyssa Milano",
+        "Molly Ringwald",
+        "Ally Sheedy",
+        "Debbie Harry",
+        "Olivia Newton-John",
+        "Elton John",
+        "Michael J. Fox",
+        "Axl Rose",
+        "Emilio Estevez",
+        "Ralph Macchio",
+        "Rob Lowe",
+        "Jennifer Grey",
+        "Mickey Rourke",
+        "John Cusack",
+        "Matthew Broderick",
+        "Justine Bateman",
+        "Lisa Bonet",
+      ];
+      return list[Math.floor(Math.random() * list.length)];
+    },
+  },
+};
 </script>
 
 <style lang="scss">
@@ -75,9 +131,9 @@ export default {
   }
 
   pre {
-    background: #0D0D0D;
-    color: #FFF;
-    font-family: 'JetBrainsMono', monospace;
+    background: #0d0d0d;
+    color: #fff;
+    font-family: "JetBrainsMono", monospace;
     padding: 0.75rem 1rem;
     border-radius: 0.5rem;
 
@@ -90,7 +146,7 @@ export default {
   }
 
   mark {
-    background-color: #FAF594;
+    background-color: #faf594;
   }
 
   img {
@@ -104,12 +160,12 @@ export default {
 
   blockquote {
     padding-left: 1rem;
-    border-left: 2px solid rgba(#0D0D0D, 0.1);
+    border-left: 2px solid rgba(#0d0d0d, 0.1);
   }
 
   hr {
     border: none;
-    border-top: 2px solid rgba(#0D0D0D, 0.1);
+    border-top: 2px solid rgba(#0d0d0d, 0.1);
     margin: 2rem 0;
   }
 
@@ -132,5 +188,31 @@ export default {
       }
     }
   }
+}
+/* Give a remote user a caret */
+.collaboration-cursor__caret {
+  position: relative;
+  margin-left: -1px;
+  margin-right: -1px;
+  border-left: 1px solid #0d0d0d;
+  border-right: 1px solid #0d0d0d;
+  word-break: normal;
+  pointer-events: none;
+}
+
+/* Render the username above the caret */
+.collaboration-cursor__label {
+  position: absolute;
+  top: -1.4em;
+  left: -1px;
+  font-size: 12px;
+  font-style: normal;
+  font-weight: 600;
+  line-height: normal;
+  user-select: none;
+  color: #0d0d0d;
+  padding: 0.1rem 0.3rem;
+  border-radius: 3px 3px 3px 0;
+  white-space: nowrap;
 }
 </style>
